@@ -1,30 +1,34 @@
-# Stage 1: Build your app using Maven with JDK 21
-FROM maven:3.9.2-eclipse-temurin-21 AS build
+# ---------- Stage 1: Build the application ----------
+# Use Maven with JDK 21 to compile the project
+FROM maven:3.9.2-jdk-21 AS build
 
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy pom.xml separately to download dependencies (speed up builds)
+# Copy Maven configuration first (for layer caching)
 COPY pom.xml .
-
-# Download dependencies without building
+# Download all dependencies (helps cache)
 RUN mvn dependency:go-offline
 
-# Copy your source code
+# Copy the source code into the container
 COPY src ./src
 
-# Build your Spring Boot app (skip tests for faster build)
+# Build the application and skip tests to speed up
 RUN mvn clean package -DskipTests
 
-# Stage 2: Create a lightweight runtime image with just JRE
+
+# ---------- Stage 2: Run the application ----------
+# Use a smaller image with only the JRE
 FROM eclipse-temurin:21-jre-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Copy the built jar from the build stage
+# Copy the built JAR file from the build stage
 COPY --from=build /app/target/*.jar app.jar
 
-# Tell Docker the app listens on port 8080
+# Expose the port the app runs on (Spring Boot default)
 EXPOSE 8080
 
-# Run your app
+# Command to run the app
 ENTRYPOINT ["java", "-jar", "app.jar"]
