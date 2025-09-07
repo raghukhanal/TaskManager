@@ -20,7 +20,7 @@ jobs:
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'   # Added required distribution here
+          distribution: 'temurin'   # Required distribution
           java-version: '21'
 
       - name: Build and test backend (Maven)
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: src/main
+        working-directory: src/main/frontend  # Updated to frontend folder
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
