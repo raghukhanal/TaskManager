@@ -12,7 +12,7 @@ function TaskList() {
 
     const addTask = async () => {
         if (!title) return;
-        await fetch("http://localhost:5173/api/tasks", {
+        await fetch("http://localhost:5173/tasks", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title }),
@@ -22,7 +22,7 @@ function TaskList() {
     };
 
     const completeTask = async (id) => {
-        await fetch(`http://localhost:5173/api/tasks/${id}/complete`, {
+        await fetch(`http://localhost:5173/tasks/${id}/complete`, {
             method: "PUT",
         });
         fetchTasks();

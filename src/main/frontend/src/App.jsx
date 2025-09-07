@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-      <div classname="App">
+      <div className="App">
         <TaskList />
       </div>
     </>
